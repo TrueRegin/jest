@@ -2,80 +2,77 @@ package fun.nothaving.jest;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin{
-	
-	CreatureListener cListen = new CreatureListener(this);
-	PlayerListener pListen = new PlayerListener(this);
-	
-	//When the plugin starts
-	@Override
-	public void onEnable() {
-		PluginManager pm = getServer().getPluginManager();
-		getLogger().info("Jest has been enabled.");
-		pm.registerEvents(pListen, this);
-		pm.registerEvents(cListen, this);
-	}
-	
-	//When the plugin ends/disables
-	@Override
-	public void onDisable() {
-		getLogger().info("Jest has been disabled.");
-	}
-	
-	//When command is typed
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		Player steve = (Player) sender;
-		Commands com = new Commands();
-		
-		//if the command is sent by a player
-		if(sender instanceof Player) {
-			//gets command string
-			String commandStr = cmd.getName();
-			
-			//if player is opped
-			if(steve.isOp()) {
-				//Command switch statement
-				switch(commandStr) {
-				
-				case "setMobDifficulty":
-					//modifies mob difficulty
-					com.forcedMobDifficulty(cListen, args);
-					return true;
-				case "togglePlayerEffects":
-					//modifies player effects
-					pListen.swPlayerEffects();
-					return true;
-				case "getJestStatus":
-					//Gets status from listeners
-					Bukkit.broadcastMessage(ChatColor.BLUE + "" +ChatColor.BOLD +"----------------------");
-					Bukkit.broadcastMessage(ChatColor.BLUE + "" +ChatColor.BOLD +"[Jest Current Status]");
-					pListen.getInfo();
-					cListen.getInfo();
-					Bukkit.broadcastMessage(ChatColor.BLUE + "" +ChatColor.BOLD +"----------------------");
-					return true;
-				default:
-					steve.sendMessage("Your command was not recognized.");
-					return true;
-			
-				}
-			}
-			else {
-				steve.sendMessage("Your command was denied. Are you OP'ed?");
-				return true;
-			}
-			
-		}
-		
-		
-		return false;
-	}
-	
-	
+import fun.nothaving.jest.commands.JeffectCommand;
+import fun.nothaving.jest.commands.GetJestStatusCommand;
+import fun.nothaving.jest.commands.SetMobDifficultyCommand;
+import fun.nothaving.jest.engine.Engine;
+import fun.nothaving.jest.engine.StateManager;
+import fun.nothaving.jest.engine.TickScheduler;
+import fun.nothaving.jest.listeners.CreatureListener;
+import fun.nothaving.jest.listeners.EntityListener;
+import fun.nothaving.jest.listeners.PlayerListener;
+import fun.nothaving.jest.utils.effect.JestEffect;
+
+public class Main extends JavaPlugin {
+
+    CreatureListener c_listener;
+    PlayerListener p_listener;
+    EntityListener e_listener;
+    TickScheduler scheduler;
+
+    /**
+     * Registers all custom event listeners
+     */
+    private void registerEvents() {
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(p_listener, this);
+        pm.registerEvents(c_listener, this);
+        pm.registerEvents(e_listener, this);
+
+        getServer().getConsoleSender().sendMessage(JestEffect.class.getTypeName());
+    }
+
+    /**
+     * Registers all custom commands with Spigot
+     */
+    private void registerCommands() {
+        getCommand("setMobDifficulty").setExecutor(new SetMobDifficultyCommand());
+        getCommand("getJestStatus").setExecutor(new GetJestStatusCommand(p_listener, c_listener));
+        getCommand("jeffect").setExecutor(new JeffectCommand());
+    }
+
+    public void loadOnlinePlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            StateManager.addPlayer(player);
+        }
+    }
+
+    @Override
+    public void onEnable() {
+        init();
+        Engine.init();
+        loadOnlinePlayers();
+        scheduler.runTaskTimer(this, 0, 1);
+        registerEvents();
+        registerCommands();
+        getLogger().info(ChatColor.LIGHT_PURPLE + "Jest has been enabled.");
+    }
+
+    @Override
+    public void onDisable() {
+        getLogger().info(ChatColor.DARK_RED + "Jest has been disabled.");
+        // Save all state into a database or file.
+        scheduler.cancel();
+    }
+
+    private void init() {
+        c_listener = new CreatureListener();
+        p_listener = new PlayerListener();
+        e_listener = new EntityListener();
+        scheduler = new TickScheduler();
+    }
 }

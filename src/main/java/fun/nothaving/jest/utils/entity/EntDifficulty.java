@@ -1,57 +1,26 @@
-package fun.nothaving.jest;
+package fun.nothaving.jest.utils.entity;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class CreatureListener implements Listener{
-	
-	boolean enableMobDiff = true;
-	int weapMode = 2;
-	
-	public CreatureListener(Main plugin) {
-		
-	}
-	
-	//------------------------------------------------------------
-	//Active listener methods
-	//------------------------------------------------------------
-	
-	//When a mob spawns
-	@EventHandler
-	public void onCreatureSpawn(CreatureSpawnEvent event) {
-		LivingEntity creature = event.getEntity();
-		
-		//If enableMobDifficulty is enabled
-		if(enableMobDiff) {
-			//Forces mobs to spawn with added attributes
-			setMobDifficulty(creature);
-		}
-		
-	}
-	
-	
-	//------------------------------------------------------------
-	//Methods to help keep main methods easier to read, and shorter
-	//------------------------------------------------------------
-	
-	public void setMobDifficulty(LivingEntity creature) {
+import fun.nothaving.jest.engine.StateManager;
+
+public class EntDifficulty {
+    public static void setMobDifficulty(LivingEntity creature) {
 		//Pre: A LivingEntity Entity
 		//Post: Manipulates the mobs in different ways
 		
-		//If the entity is a zombie
+        //If the entity is a zombie
+        int difficulty = StateManager.getCustomDifficulty();
+
 		if(creature.getType() == EntityType.ZOMBIE) {
 			
 			//Switch for the different weapon modes
-			switch(weapMode) {
+			switch(difficulty) {
 				case 1:
 					//Equips zombies with wooden swords
 					creature.getEquipment().setItemInMainHand(new ItemStack(Material.WOODEN_SWORD, 1));
@@ -75,7 +44,7 @@ public class CreatureListener implements Listener{
 		if(creature.getType() == EntityType.SKELETON) {
 			
 			//Switch for the different weapon modes
-			switch(weapMode) {
+			switch(difficulty) {
 				case 2:
 					creature.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, true, false));
 					break;
@@ -94,7 +63,7 @@ public class CreatureListener implements Listener{
 		if(creature.getType() == EntityType.CREEPER) {
 			
 			//Switch for the different weapon modes
-			switch(weapMode) {
+			switch(difficulty) {
 				case 1:
 					//Gives Creeper potions
 					creature.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 1, true, false));
@@ -122,7 +91,7 @@ public class CreatureListener implements Listener{
 		if(creature.getType() == EntityType.SPIDER) {
 					
 			//Switch for the different weapon modes
-			switch(weapMode) {
+			switch(difficulty) {
 				case 1:
 					//Gives Spider potions
 					creature.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, true, false));
@@ -148,53 +117,4 @@ public class CreatureListener implements Listener{
 		
 	}
 	
-	//------------------------------------------------------------
-	//getters and setters
-	//------------------------------------------------------------
-	
-	public void swMobDifficulty() {
-		//Inverts enableMobDiff's value
-		enableMobDiff = !enableMobDiff;
-		Bukkit.broadcastMessage(ChatColor.BLUE + "" +ChatColor.BOLD +"   Mob Difficulty = " + enableMobDiff);
-	}
-	public void swMobDifficulty(int mode) {
-		if(!enableMobDiff) {
-			swMobDifficulty();
-		}
-		weapMode = mode;
-		switch(mode) {
-			case 1:
-				//Easy Mode
-				Bukkit.broadcastMessage("[Easy Mode Enabled]");
-				break;
-			case 2:
-				//Medium Mode
-				Bukkit.broadcastMessage("[Medium Mode Enabled]");
-				break;
-			case 3:
-				//Hard Mode
-				Bukkit.broadcastMessage("[Hard Mode Enabled]");
-				break;
-			default:
-				break;
-		}
-	}
-	public void getInfo() {
-		Bukkit.broadcastMessage(ChatColor.BLUE + "" +ChatColor.BOLD +"   setMobDifficulty = " + enableMobDiff);
-		if(enableMobDiff) {
-			switch(weapMode) {
-				case 1:
-					Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "" +ChatColor.BOLD +"   enableMobDifficulties = Easy");
-					break;
-				case 2:
-					Bukkit.broadcastMessage(ChatColor.YELLOW + "" +ChatColor.BOLD +"   enableMobDifficulties = Medium");
-					break;
-				case 3:
-					Bukkit.broadcastMessage(ChatColor.RED + "" +ChatColor.BOLD +"   MobDifficultyLevel = Hard");
-					break;
-				default:
-					break;
-			}
-		}
-	}
 }

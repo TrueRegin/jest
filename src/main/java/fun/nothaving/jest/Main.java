@@ -6,9 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fun.nothaving.jest.commands.JeffectCommand;
 import fun.nothaving.jest.commands.GetJestStatusCommand;
+import fun.nothaving.jest.commands.JeffectCommand;
 import fun.nothaving.jest.commands.SetMobDifficultyCommand;
+import fun.nothaving.jest.commands.tab_completers.EmptyTabCompleter;
 import fun.nothaving.jest.engine.Engine;
 import fun.nothaving.jest.engine.StateManager;
 import fun.nothaving.jest.engine.TickScheduler;
@@ -41,6 +42,7 @@ public class Main extends JavaPlugin {
      */
     private void registerCommands() {
         getCommand("setMobDifficulty").setExecutor(new SetMobDifficultyCommand());
+        getCommand("getJestStatus").setTabCompleter(new EmptyTabCompleter());
         getCommand("getJestStatus").setExecutor(new GetJestStatusCommand(p_listener, c_listener));
         getCommand("jeffect").setExecutor(new JeffectCommand());
     }

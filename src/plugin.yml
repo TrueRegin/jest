@@ -17,4 +17,4 @@ commands:
       usage: /<command>
     jeffect:
       description: 'Applies a Jest effect to a player'
-      usage: /<command> [bleeding] [username] [duration] [intensity]
+      usage: /<command>

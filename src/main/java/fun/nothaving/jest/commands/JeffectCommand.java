@@ -27,7 +27,7 @@ public class JeffectCommand extends PlayerCommand {
         else if (props.args.length == 4) {
             try {
                 String effect = props.args[0].toLowerCase();
-                Player target = Bukkit.getPlayer(props.args[2]);
+                Player target = Bukkit.getPlayer(props.args[1]);
                 int duration = Integer.parseInt(props.args[2]) * 1000; // Duration in seconds
                 byte intensity = Byte.parseByte(props.args[3]);
 
@@ -35,7 +35,7 @@ public class JeffectCommand extends PlayerCommand {
             } catch (NumberFormatException e) {
                 props.sender.sendMessage(Errors.MALFORMED_ARGS);
                 return false;
-            } catch(Error e) {
+            } catch(NullPointerException e) {
                 props.sender.sendMessage(Errors.INVALID_USERNAME);
                 return false;
             }

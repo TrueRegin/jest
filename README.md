@@ -1,4 +1,24 @@
 # Jest 0.1.1
+
+---
+## Prerequesites
+Before using this project you need to have Maven installed. You can learn how to set it up [here](https://maven.apache.org/install.html).
+
+[> Maven Download <](https://maven.apache.org/download.cgi)
+
+---
+## Setup
+Run `mvn install` to download all necessary dependencies for the project.
+
+Download the 1.13.2 server jar from [the PaperMC legacy builds](https://papermc.io/legacy)
+
+Double click `run.bat` in the `server/` directory to start your server. Make sure to set the EULA to true.
+
+Run `mvn package` to build the code into a jar and place it into the `server/plugins/` directory. The plugin will automatically overwrite the old version of the plugin, so you can run `/reload confirm` on the Development MC Server to reload the plugin.
+
+
+> You are now set up and ready to start tinkering with the Jest plugin.
+
 ---
 ## Overview
 The plugin jest is designed to increase the difficulty of survival Minecraft.

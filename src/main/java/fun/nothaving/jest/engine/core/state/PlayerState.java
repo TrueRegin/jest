@@ -24,12 +24,10 @@ public class PlayerState extends EntityState {
     protected boolean currently_sprinting;
     protected boolean currently_swimming;
 
-    protected Player player;
     protected HashMap<JestEffect, JestEffectStats> effects;
 
-    public PlayerState(Player player, int max_run_fatigue, int max_swim_fatigue) {
+    public PlayerState(int max_run_fatigue, int max_swim_fatigue) {
         super();
-        this.player = player;
         this.max_sprint_fatigue = max_run_fatigue;
         this.max_swim_fatigue = max_swim_fatigue;
         this.sprinting_last_tick = false;
@@ -39,7 +37,7 @@ public class PlayerState extends EntityState {
         effects = new HashMap<JestEffect, JestEffectStats>();
     }
 
-    public void tick() {
+    public void tick(Player player) {
         // Go through all effects and tick them if they're tickable.
         // Effect.tick(player, this)
         for(JestEffect effect : effects.keySet()) {
@@ -47,7 +45,7 @@ public class PlayerState extends EntityState {
 
             effectStats.updateDuration();
             if(effectStats.hasExpired()) {
-                removeEffect(effect);
+                removeEffect(player, effect);
             } else {
                 effect.tick(player);
             }
@@ -73,17 +71,17 @@ public class PlayerState extends EntityState {
      * Removes an applied effect from a player so it no longer takes effect on them.
      * @param effect
      */
-    public void removeEffect(JestEffect effect) {
+    public void removeEffect(Player player, JestEffect effect) {
         if(StateManager.getCustomEffectsEnabled()) {
             effect.remove(player);
             effects.remove(effect);
         }
     }
 
-    public void removeAllEffects() {
+    public void removeAllEffects(Player player) {
         if(StateManager.getCustomEffectsEnabled()) {
             for(JestEffect effect : effects.keySet()) {
-                effect.remove(this.player);
+                effect.remove(player);
                 effects.remove(effect);
             }
         }
@@ -98,16 +96,24 @@ public class PlayerState extends EntityState {
     public double getSwimFatigue() {
         return swim_fatigue;
     }
-    
+
+    public int getMaxSwimFatigue() {
+        return max_swim_fatigue;
+    }
+
     public boolean hasMaxSwimFatigue() {
         return swim_fatigue == max_swim_fatigue;
     }
 
-    public double getRunFatigue() {
+    public double getSprintFatigue() {
         return sprint_fatigue;
     }
 
-    public boolean hasMaxRunFatigue() {
+    public int getMaxSprintFatigue() {
+        return max_sprint_fatigue;
+    }
+
+    public boolean hasMaxSprintFatigue() {
         return sprint_fatigue == max_sprint_fatigue;
     }
 

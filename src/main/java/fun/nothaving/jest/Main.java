@@ -47,6 +47,7 @@ public class Main extends JavaPlugin {
         getCommand("getJestStatus").setTabCompleter(new EmptyTabCompleter());
         getCommand("setMobDifficulty").setTabCompleter(new SetMobDifficultyTabCompleter());
         getCommand("jeffect").setTabCompleter(new JeffectTabCompleter());
+
         // Setting tab completers
         getCommand("getJestStatus").setExecutor(new GetJestStatusCommand(p_listener, c_listener));
         getCommand("setMobDifficulty").setExecutor(new SetMobDifficultyCommand());
@@ -68,6 +69,7 @@ public class Main extends JavaPlugin {
         registerEvents();
         registerCommands();
         getLogger().info(ChatColor.LIGHT_PURPLE + "Jest has been enabled.");
+        Bukkit.getConsoleSender().sendMessage("HELLO WORLD");
     }
 
     @Override

@@ -81,14 +81,15 @@ public class JeffectCommand extends PlayerCommand {
             }
         } else {            
             if(props.args.length == 1) {
-                StateManager.getState((Player) props.sender).removeAllEffects();
+                Player target = (Player) props.sender;
+                StateManager.getState(target).removeAllEffects(target);
                 props.sender.sendMessage(Success.ALL_EFFECTS_REMOVED_MESSAGE());
                 return true;
             }
             else if(props.args.length == 2) {
                 try {
                     Player target = Bukkit.getPlayer(props.args[1]);
-                    StateManager.getState(target).removeAllEffects();
+                    StateManager.getState(target).removeAllEffects(target);
                     target.sendMessage(Success.ALL_EFFECTS_REMOVED_MESSAGE());
                     return true;
                 } catch(Error e) {

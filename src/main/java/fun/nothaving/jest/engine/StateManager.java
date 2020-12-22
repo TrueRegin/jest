@@ -47,7 +47,7 @@ public class StateManager {
             state.updateSwimFatigue();
             state.setSprinting(player.isSprinting() && !player.isSwimming());
             state.setSwimming(player.isSwimming());
-            state.tick();
+            state.tick(player);
         }
     }
 
@@ -58,7 +58,7 @@ public class StateManager {
     public static void addPlayer(Player player) {
         if (!STATES.containsKey(player) && STATES.get(player) == null) {
             System.out.println("Added PLAYER!");
-            STATES.put(player, new PlayerState(player, Generic.DFT_MAX_RUN_FATIGUE, Generic.DFT_MAX_SWIM_FATIGUE));
+            STATES.put(player, new PlayerState(Generic.DFT_MAX_RUN_FATIGUE, Generic.DFT_MAX_SWIM_FATIGUE));
         }
     }
 

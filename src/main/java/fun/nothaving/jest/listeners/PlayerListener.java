@@ -41,7 +41,7 @@ public class PlayerListener extends ListenerWithInfo {
             CustomEffects.SWIM_BLINDNESS().apply(player,
                     new JestEffectStats(Generic.SWIM_BLINDNESS_DURATION, CustomEffects.SWIM_BLINDNESS_MAX_LEVEL));
         }
-        if (state.hasMaxRunFatigue()) {
+        if (state.hasMaxSprintFatigue()) {
             CustomEffects.SPRINT_NAUSEA().apply(player,
                     new JestEffectStats(Generic.SPRINT_NAUSEA_DURATION, CustomEffects.SPRINT_NAUSEA_MAX_LEVEL));
         }

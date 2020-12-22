@@ -13,10 +13,23 @@
         <artifactId>spigot</artifactId>
         <version>1.13.2-R0.1-SNAPSHOT</version>
         <scope>provided</scope>
-      </dependency>  
+     </dependency>
+     <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.7.0</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>5.7.0</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   
     <build>
+      <testSourceDirectory>src/test/java</testSourceDirectory>
       <resources>
         <resource>
           <directory>src</directory>
@@ -33,6 +46,14 @@
           <configuration>
             <outputDirectory>${basedir}\server\plugins</outputDirectory>
           </configuration>
+        </plugin>
+        <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.22.2</version>
+        </plugin>
+        <plugin>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>2.22.2</version>
         </plugin>
       </plugins>
     </build>

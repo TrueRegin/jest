@@ -19,6 +19,12 @@ public class MathUtils {
         return value;
     }
 
+    public static byte clamp(byte min, byte max, byte value) {
+        if(value < min) return min;
+        if(value > max) return max;
+        return value;
+    }
+
     public static long clamp(long min, long max, long value) {
         if(value < min) return min;
         if(value > max) return max;

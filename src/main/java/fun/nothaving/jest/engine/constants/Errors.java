@@ -10,7 +10,7 @@ public class Errors {
      * Errors for commands
      */
     public static final String INVALID_ARGS_COUNT = ChatColor.RED + "Invalid number of arguments entered for this command. Missing arguments?";
-    public static final String MALFORMED_ARGS = ChatColor.RED + "1 or more invalid arguments were entered. Did you enter an argument with invalid data?";
+    public static final String INVALID_ARG_VALUES = ChatColor.RED + "1 or more invalid arguments were entered. Did you enter an argument with invalid data?";
     public static final String INVALID_USERNAME = ChatColor.RED + "An invalid username was used in your command! Did you misscapitalize a letter or enter the wrong character?";
     
     /**

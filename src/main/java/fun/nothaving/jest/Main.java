@@ -10,6 +10,8 @@ import fun.nothaving.jest.commands.GetJestStatusCommand;
 import fun.nothaving.jest.commands.JeffectCommand;
 import fun.nothaving.jest.commands.SetMobDifficultyCommand;
 import fun.nothaving.jest.commands.tab_completers.EmptyTabCompleter;
+import fun.nothaving.jest.commands.tab_completers.JeffectTabCompleter;
+import fun.nothaving.jest.commands.tab_completers.SetMobDifficultyTabCompleter;
 import fun.nothaving.jest.engine.Engine;
 import fun.nothaving.jest.engine.StateManager;
 import fun.nothaving.jest.engine.TickScheduler;
@@ -41,9 +43,13 @@ public class Main extends JavaPlugin {
      * Registers all custom commands with Spigot
      */
     private void registerCommands() {
-        getCommand("setMobDifficulty").setExecutor(new SetMobDifficultyCommand());
+        // Setting tab completers
         getCommand("getJestStatus").setTabCompleter(new EmptyTabCompleter());
+        getCommand("setMobDifficulty").setTabCompleter(new SetMobDifficultyTabCompleter());
+        getCommand("jeffect").setTabCompleter(new JeffectTabCompleter());
+        // Setting tab completers
         getCommand("getJestStatus").setExecutor(new GetJestStatusCommand(p_listener, c_listener));
+        getCommand("setMobDifficulty").setExecutor(new SetMobDifficultyCommand());
         getCommand("jeffect").setExecutor(new JeffectCommand());
     }
 

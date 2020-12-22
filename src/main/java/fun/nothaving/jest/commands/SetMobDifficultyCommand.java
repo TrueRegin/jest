@@ -27,8 +27,8 @@ public class SetMobDifficultyCommand extends PlayerCommand {
                 catch(NumberFormatException e) {
                     Integer difficulty = Generic.DIFFICULTIES.getByLabel(props.args[0]);
                     if(difficulty == null) {
-                        player.sendMessage(Errors.MALFORMED_ARGS);
-                        return false;
+                        player.sendMessage(Errors.INVALID_ARG_VALUES);
+                        return true;
                     } else {
                         StateManager.setCustomDifficulty(difficulty);
                         player.sendMessage(Success.DIFFICULTY_CHANGED(props.args[0]));
@@ -40,10 +40,10 @@ public class SetMobDifficultyCommand extends PlayerCommand {
                 return true;
             } else {
                 player.sendMessage(Errors.INVALID_ARGS_COUNT);
-                return false;
+                return true;
             }
         }
         
-        return false;
+        return true;
     }
 }

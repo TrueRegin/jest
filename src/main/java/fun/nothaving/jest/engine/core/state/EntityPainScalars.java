@@ -5,12 +5,11 @@ import java.util.HashMap;
 import org.bukkit.entity.EntityType;
 
 import fun.nothaving.jest.engine.core.math.MathUtils;
-import io.netty.util.internal.MathUtil;
 
-public class EntityDamageScalars {
+public class EntityPainScalars {
     private HashMap<EntityType, Double> damageScalars;
 
-    public EntityDamageScalars() {
+    public EntityPainScalars() {
         damageScalars = new HashMap<EntityType, Double>();
     }
 

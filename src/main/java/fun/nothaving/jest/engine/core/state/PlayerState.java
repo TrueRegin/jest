@@ -2,9 +2,9 @@ package fun.nothaving.jest.engine.core.state;
 
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import fun.nothaving.jest.engine.StateManager;
 import fun.nothaving.jest.engine.constants.Generic;
 import fun.nothaving.jest.engine.core.math.MathUtils;
 import fun.nothaving.jest.structs.JestEffectStats;
@@ -28,6 +28,7 @@ public class PlayerState extends EntityState {
     protected HashMap<JestEffect, JestEffectStats> effects;
 
     public PlayerState(Player player, int max_run_fatigue, int max_swim_fatigue) {
+        super();
         this.player = player;
         this.max_sprint_fatigue = max_run_fatigue;
         this.max_swim_fatigue = max_swim_fatigue;
@@ -63,7 +64,9 @@ public class PlayerState extends EntityState {
      * @param stats - The duration and intensity of the potion to be applied
      */
     public void addEffect(JestEffect effect, JestEffectStats stats) {
-        effects.put(effect, stats);
+        if(StateManager.getCustomEffectsEnabled()) {
+            effects.put(effect, stats);
+        }
     }
 
     /**
@@ -71,8 +74,19 @@ public class PlayerState extends EntityState {
      * @param effect
      */
     public void removeEffect(JestEffect effect) {
-        effect.remove(player);
-        effects.remove(effect);
+        if(StateManager.getCustomEffectsEnabled()) {
+            effect.remove(player);
+            effects.remove(effect);
+        }
+    }
+
+    public void removeAllEffects() {
+        if(StateManager.getCustomEffectsEnabled()) {
+            for(JestEffect effect : effects.keySet()) {
+                effect.remove(this.player);
+                effects.remove(effect);
+            }
+        }
     }
 
 
@@ -102,22 +116,46 @@ public class PlayerState extends EntityState {
      * Setters
      */
 
-    public void incMaxRunFatigue(int amount) {
-        int newMaxFatigue = MathUtils.clamp(Generic.MIN_RUN_FATIGUE, max_sprint_fatigue, max_sprint_fatigue + amount);
-        this.sprint_fatigue = newMaxFatigue;
+     /**
+      * 
+      * @param amount The amount to increase the max sprint fatigue by.
+      * @return The integer amount that got added to the max sprint fatigue. This value should be used with quirks to prevent a destruction of max fatigue if you ever go above or below the fatigue MAXS or MINS!
+      */
+    public int incMaxRunFatigue(int amount) {
+        int old_max_sprint_fatigue = this.max_sprint_fatigue;
+        int new_max_sprint_fatigue = MathUtils.clamp(Generic.MIN_RUN_FATIGUE, Generic.MAX_RUN_FATIGUE, max_sprint_fatigue + amount);
+        this.max_sprint_fatigue = new_max_sprint_fatigue;
+        return new_max_sprint_fatigue - old_max_sprint_fatigue;
     }
 
-    public void decMaxRunFatigue(int amount) {
-        incMaxRunFatigue(-amount);
+    /**
+      * 
+      * @param amount The amount to decrease the max sprint fatigue by.
+      * @return The integer amount that got removed from the max sprint fatigue. This value should be used with quirks to prevent a destruction of max fatigue if you ever go above or below the fatigue MAXS or MINS!
+      */
+    public int decMaxRunFatigue(int amount) {
+        return incMaxRunFatigue(-amount);
     }
 
-    public void incMaxSwimFatigue(int amount) {
-        int newMaxFatigue = MathUtils.clamp(Generic.MIN_SWIM_FATIGUE, max_swim_fatigue, max_swim_fatigue + amount);
-        this.swim_fatigue = newMaxFatigue;
+    /**
+     * 
+     * @param amount The amount to increase the max swim fatigue by.
+     * @return The integer amoutn that got added to the max swim fatigue. This value should be used with quirks to prevent a destruction of max fatigue if you ever go above or below the fatigue MAXS or MINS.
+     */
+    public int incMaxSwimFatigue(int amount) {
+        int old_max_swim_fatigue = this.max_swim_fatigue;
+        int new_max_swim_fatigue = MathUtils.clamp(Generic.MIN_SWIM_FATIGUE, Generic.MAX_SWIM_FATIGUE, max_swim_fatigue + amount);
+        this.max_swim_fatigue = new_max_swim_fatigue;
+        return new_max_swim_fatigue - old_max_swim_fatigue;
     }
 
-    public void decMaxSwimFatigue(int amount) {
-        incMaxRunFatigue(-amount);
+    /**
+     * 
+     * @param amount The amount to decrease the max swim fatigue by.
+     * @return The integer amoutn that got removed from the max swim fatigue. This value should be used with quirks to prevent a destruction of max fatigue if you ever go above or below the fatigue MAXS or MINS.
+     */
+    public int decMaxSwimFatigue(int amount) {
+        return incMaxRunFatigue(-amount);
     }
 
     /** */
